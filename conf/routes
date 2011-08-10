@@ -1,0 +1,17 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Ignore favicon requests
+GET     /favicon.ico                        404
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+# Wiki home page
+GET     /									Wiki.index
+GET		/{<[^\.]*>path}						Wiki.show
+POST	/{<[^\.]*>path}						Wiki.save
+GET		/{<[^\.]*>path}.edit				Wiki.edit
+GET		/{<[^\.]*>path}.history				Wiki.history
+GET		/{<[^\.]*>path}.{version}			Wiki.version

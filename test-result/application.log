@@ -1,0 +1,4 @@
+10 août 2011 08:03:19,853 INFO  ~ Starting /Users/yall/Dev/wig-tmp/.
+10 août 2011 08:03:21,087 WARN  ~ You're running Play! in DEV mode
+10 août 2011 08:03:22,279 INFO  ~ Connected to jdbc:h2:mem:play;MODE=MYSQL;LOCK_MODE=0
+10 août 2011 08:03:22,294 INFO  ~ Application 'Wig' is now started !

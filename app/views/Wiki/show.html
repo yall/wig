@@ -1,0 +1,35 @@
+#{extends 'main.html' /}
+#{set title:"${article.path} - Wig" /}
+
+<h1 class="wig-title"><a href="/">&{'wig.title'}</a> show</h1>
+
+<h2 class="wig-title">
+	Article: ${article.path}
+	#{if article.exists} 
+	<span class="wig-version">Version: ${article.version?.version}</span> 
+	#{/if}
+	#{else}
+	<span class="wig-message">does not exist</span>
+	#{/else}
+</h2>
+
+#{if article.exists}
+	<div class="wig-commands">
+		[<a href="@{Wiki.edit(article.path.raw())}">edit</a>]
+		[<a href="@{Wiki.history(article.path.raw())}">history</a>]
+	</div>
+	<div class="wig-content">
+		${html.raw()}
+	</div>
+#{/if}
+#{else}
+	<p>This article (<span class="wig-article-path">${article.path}</span>) does not exist.</p>
+	<p>
+		<a href="/${article.path.raw()}.edit">Create ${article.path}</a> or 
+		<a href="@{Wiki.index}">search</a> anything else.
+	</p>
+#{/else}
+
+<div class="modification">
+	
+</div>

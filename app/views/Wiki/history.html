@@ -1,0 +1,27 @@
+#{extends 'main.html' /}
+#{set title:"${article.path} - Wig" /}
+
+<h1 class="wig-title"><a href="/">&{'wig.title'}</a> history</h1>
+
+<h2 class="wig-title">Article: ${article.path} <span class="wig-version">History</span></h2>
+
+<table class="wig-history">
+	<tr>
+		<th>Version</th>
+		<th>Date</th>
+		<th>User</th>
+		<th>Comment</th>
+		<th></th>
+	<tr>
+	
+	#{list items:history, as:'version'}
+	<tr>
+		<td>${version.version}</td>
+		<td>${version.date.since()}</td>
+		<td>${version.user}</td>
+		<td>${version.comment}</td>
+		<td><a href="@{Wiki.show(article.path)}.v${version.version}">[show]</a></td>
+	</tr>
+	#{/list}
+	
+</table>

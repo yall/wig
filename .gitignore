@@ -1,0 +1,10 @@
+# temp files
+.DS_Store
+tmp
+
+# eclipse
+eclipse
+.settings
+.classpath
+.project
+

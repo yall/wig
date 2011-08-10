@@ -1,0 +1,20 @@
+#{extends 'main.html' /}
+#{set title:"${article.path} - Wig" /}
+
+<h1 class="wig-title"><a href="/">&{'wig.title'}</a> edit</h1>
+
+<h2 class="wig-title">
+	Article: ${article.path} 
+	#{if !article.exists}
+		<span class="wig-new">New!</span>
+	#{/if}
+</h2>
+
+<form class="wig-edit" action="/${article.path.raw()}" method="POST">
+ 	<textarea class="large" name="article.content" rows="12">${article.content?.raw()}</textarea>
+	<br>
+	<input type="submit" value="Enregistrer" />
+	<input type="button" value="Apercu" onclick="wig.preview()"/>
+	<input type="button" value="Annuler" onclick="wig.show('/${article.path.raw()}')" />
+</form>
+

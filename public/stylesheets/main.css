@@ -1,0 +1,50 @@
+body {
+	font-family: Arial;
+	width: 800px;
+	margin: 0 auto;
+}
+h1.wig-title, h2.wig-title {
+	padding: 5px;
+	background: #DDD;
+}
+form .large {
+	width: 700px;
+}
+
+span.wig-new {
+	color: red;
+}
+
+div.wig-content {
+	padding: 0 5px;
+	border: 1px solid #CCC;
+}
+
+span.wig-article-path {
+	background: #DDD;
+}
+
+h2 span.wig-version,
+h2 span.wig-message {
+	color: #fff;
+}
+
+
+form.wig-edit,
+form.wig-edit textarea {
+	width: 100%;
+	margin: 0;	
+}
+
+table.wig-history th {
+	text-align: left;
+	border-bottom: 1px solid #000;
+}
+
+table.wig-history {
+	font-size: 13px;
+	width: 100%;
+}
+table.wig-history tr.event td {
+	background: #ddd;
+}

@@ -1,0 +1,12 @@
+#{extends 'main.html' /}
+#{set title:"Wig" /}
+
+<h1 class="wig-title"><a href="/">&{'wig.title'}</a> index</h1>
+
+<h2 class="wig-title">Search</h2>
+
+<p>Insert article name (e.g. fruits/apples/granny)</p>
+<form onsubmit="return wig.show(this.path.value);">
+	<input type="text" id="path" name="path" />
+	<input type="submit" value="Search" />
+</form>
