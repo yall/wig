@@ -20,6 +20,7 @@ public class Engine {
 	}
 	
 	public static Article save(Article article) {
+		article.version.date = new Date();
 		return Storage.s().save(article);
 	}
 	

@@ -1,20 +1,31 @@
 #{extends 'main.html' /}
 #{set title:"Wig" /}
 
-<h1 class="wig-title"><a href="/">&{'wig.title'}</a> index</h1>
+<div id="header">
+	<ol id="breadcrumbs">
+		<li class="first"><a href="@{Wiki.index}">wig</a></li>
+	</ol>
+</div>
 
-<h2 class="wig-title">Search</h2>
+<div id="main">
+<h2 class="wig-title">Consult</h2>
 
-<p>Insert article name (e.g. fruits/apples/granny)</p>
+<em>Insert article name (e.g. fruits/apples/granny).</em>
 <form onsubmit="return wig.show(this.path.value);">
 	<input type="text" id="path" name="path" />
-	<input type="submit" value="Search" />
+	<input type="submit" value="Show" />
 </form>
 
+<br><br>
 
-<h2 class="wig-title">Index</h2>
-<ul>
-	#{list items:entries, as:'entry'}
-	<li><a href="@{Wiki.show(entry.path)}">${entry.name}</a></li>
-	#{/list}
-</ul>
+
+<div class="entry-list">
+	<h2>Index</h2>
+	<ul>
+		#{list items:entries, as:'entry'}
+		<li><a href="@{Wiki.show(entry.path)}">${entry.name} #{if entry.leaf}(article)#{/if}</a></li>
+		#{/list}
+	</ul>
+</div>
+
+</div>

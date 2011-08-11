@@ -4,4 +4,17 @@
     // Open the home page, and check that no error occured
     open('/')
     assertNotTitle('Application error')
+    assertTitle('Wig')
+    
+    // Open the home page, and check that no error occured
+    open('/unexist/article')
+    assertTextPresent('Create')
+    
+    
+   	open('/unexist/article.edit')
+	assertTextPresent('New')
+	type('article.content', 'h1. Hi from Selenium')
+	type('article.version.user', 'admin')
+	type('article.version.comment', 'my comment')
+		    
 #{/selenium}

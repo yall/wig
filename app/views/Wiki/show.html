@@ -1,56 +1,59 @@
 #{extends 'main.html' /}
 #{set title:"${article.path} - Wig" /}
 
-<h1 class="wig-title"><a href="/">&{'wig.title'}</a> show</h1>
+<div id="header">
+	<ol id="breadcrumbs">
+		<li class="first"><a href="@{Wiki.index}">wig</a></li>
+		#{list items: article.parent.split(), as: 'category'}
+		<li><a href="@{Wiki.show(category.path)}">${category.name}</a></li>
+		#{/list}
+		<li>${article.name}</li>
+	</ol>
+</div>
 
-<h2 class="wig-title">
-	Article: ${article.path}
-	#{if article.exists} 
-	<span class="wig-version">Version: ${article.version?.version}</span> 
+<div id="main">
+#{if article.exists} 
+	<div class="informations">
+		Last edition <em>${article.version.date.since()}</em> by <em>${article.version.user}</em>
+		(<a href="@{Wiki.history(article.path.raw())}">show history</a>).
+	</div>
+
+	#{if flash.success}
+	    <div class="message success">${flash.success}</div>
 	#{/if}
-	#{else}
-	<span class="wig-message">does not exist</span>
-	#{/else}
-</h2>
 
-#{if article.exists}
-	
-	<div class="wig-commands">
-		#{if article.editable}
-		[<a href="@{Wiki.edit(article.path.raw())}">edit</a>]
-		#{/if}
-		[<a href="@{Wiki.history(article.path.raw())}">history</a>]
+	<div class="commands">
+		<a href="@{Wiki.edit(article.path.raw())}" class="button">Edit</a>
 	</div>
 	
-	<div class="wig-content">
+	<div class="article-content">
 		${html.raw()}
 	</div>
+	<br>
 #{/if}
 #{else}
-	<p>
-		<a href="/${article.path.raw()}.edit">Create ${article.path} article</a> or 
-		<a href="@{Wiki.index}">search</a> anything else.
-	</p>
+	<div class="message warning">	
+		L'article n'existe pas.
+	</div>
+
+	<div class="commands">
+		<a href="/${article.path.raw()}.edit" class="button big">Create article "${article.name}" &raquo;</a>
+	</div>
+
 #{/else}
 
-#{if entries != null}
-<h2 class="wig-title">
-	Category: ${article.path}
-	#{if !entries.empty}
-	<span class="wig-message">entries</span>
-	#{/if}
-	#{else}
-	<span class="wig-message">no entry</span>
-	#{/else}
-	
-</h2>
-#{if !entries.empty}
-<ul>
-	#{list items:entries, as:'entry'}
-	<li><a href="@{Wiki.show(entry.path)}">${entry.name}</a></li>
-	#{/list}
-</ul>
-#{/if}
+#{if !entries.empty}		
+<div class="entry-list">
+	<h2>See also</h2>
+	<ul class="entries">
+		#{list items:entries, as:'entry'}
+		<li><a href="@{Wiki.show(entry.path)}">${entry.name} 
+		#{if entry.leaf}
+			(article)
+		#{/if}
+		</a></li>
+		#{/list}
+	</ul>
 #{/if}
 
-
+</div>

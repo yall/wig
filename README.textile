@@ -1,1 +1,22 @@
-h1. Wig! Git-based Wiki on Play! framework
+h1. Wig is a git-based wiki powered by Play!
+
+h2. Purpose
+
+*  Play with "%{color:green}Play!%":http://www.playframework.org/
+*  Provide a simple wiki module for applications
+*  Use power of *Git* to handle storage layer, histories and diffs
+
+h2. To do
+
+*  Article preview
+*  Simple search engine base on @git-grep@ command
+*  Errors and messages
+*  Attachement upload
+*  Authentication
+*  Validations and inputs securisation
+*  More tests
+
+
+h2. About me
+
+p. I'm new to Git and to Play!. Any advice is welcome :)

@@ -2,10 +2,14 @@ package wiki;
 
 import java.util.Date;
 
+import play.data.validation.Match;
 import play.db.jpa.Model;
 
 public class Article extends Entry {
-
+	
+	@Match("([a-z]+/{1})+([a-z]+)")
+	public String path;
+	
 	public String content;
 	public boolean exists = false;
 	public Version version = new Version();
@@ -13,6 +17,7 @@ public class Article extends Entry {
 	
 	public Article(String path) {
 		super(path);
+		this.leaf = true;
 	}
 	
 	public Article(String path, String content) {

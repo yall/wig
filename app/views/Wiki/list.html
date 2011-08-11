@@ -1,0 +1,32 @@
+#{extends 'main.html' /}
+#{set title:"${path} - Wig" /}
+
+<div id="header">
+	<ol id="breadcrumbs">
+		<li class="first"><a href="@{Wiki.index}">wig</a></li>
+		#{list items: category.split(), as: 'category'}
+		<li><a href="@{Wiki.show(category.path)}">${category.name}</a></li>
+		#{/list}
+	</ol>
+</div>
+
+<div id="main">
+
+#{if entries == null || entries.empty}
+	<div class="message warning">
+		No entry under ${category.path}.
+	</div>
+#{/if}
+#{else}
+<div class="entry-list">
+	<h2>Entries under /${category.path}</h2>
+	<ul>
+		#{list items:entries, as:'entry'}
+		<li><a href="@{Wiki.show(entry.path)}">${entry.name} #{if entry.leaf}(article)#{/if}</a></li>
+		#{/list}
+	</ul>
+</div>
+#{/else}
+
+</div>
+

@@ -8,3 +8,5 @@ eclipse
 .classpath
 .project
 
+log
+test-results

@@ -48,6 +48,7 @@ public abstract class Storage {
 	public abstract Article save(Article article);
 	public abstract List<Article.Version> history(Article article);
 	public abstract List<Entry> list(String path);
+	public abstract Version currentVersion(Article article);
 	
 	static class FSStorage extends Storage {
 
@@ -85,8 +86,7 @@ public abstract class Storage {
 					writer = new FileWriter(file);
 					writer.write(article.content, 0, article.content.length());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new RuntimeException("Unable to write " + article.path, e);
 				} finally {
 					if (writer != null) {
 						try { 
@@ -100,7 +100,7 @@ public abstract class Storage {
 			}
 			
 			article.exists = file.exists();
-			
+				
 			if (article.exists && article.version == null) {
 				article.version = 
 					new Article.Version("current", "anonymous", "", new Date());
@@ -135,9 +135,8 @@ public abstract class Storage {
 				}
 			}
 				
-			if (article.exists && article.version == null) {
-				article.version = 
-					new Article.Version("current", "anonymous", "last commit", new Date());
+			if (article.exists) {
+				article.version = currentVersion(article);
 			}
 			
 			return article;
@@ -204,6 +203,12 @@ public abstract class Storage {
 			return entries;
 		}
 		
+		@Override
+		public Version currentVersion(Article article) {
+			return 
+				new Version("-", "-", "-", new Date(fileFor(article).lastModified()));
+		}
+		
 		
 	}
 
@@ -226,18 +231,37 @@ public abstract class Storage {
 			return toVersions(logs);
 		}
 		
+		@Override
+		public Version currentVersion(Article article) {
+			File file = fileFor(article);
+			List<String> logs =
+				Git.repo().log(file.getPath(), 1);
+			return toVersion(logs.get(0));
+		}
+		
 		private List<Version> toVersions(List<String> logs) {
 			List<Version> versions = new ArrayList<Article.Version>();
 			for (String log : logs) {
-				System.out.println(log);
-				String[] parts = log.split("\\t");
-				String hash = parts[0];
-				Date date = new Date(Long.valueOf(parts[1]).longValue() * 1000);
-				String user = parts[2];
-				String comment = parts[3];
-				versions.add(new Version(hash, user, comment, date));
+				versions.add(toVersion(log));
 			}
 			return versions;
+		}
+		
+		private Version toVersion(String line) {
+			String[] parts = line.split("\\t");
+			String hash = parts[0];
+			Date date = new Date(Long.valueOf(parts[1]).longValue() * 1000);
+			String user = parts[2];
+			String comment = parts[3];
+			if (comment != null) {
+				if (comment.startsWith("\"")) {
+					comment = comment.substring(1);
+				}
+				if (comment.endsWith("\"")) {
+					comment = comment.substring(0, comment.length() - 1);
+				}
+			}
+			return new Version(hash, user, comment, date);
 		}
 	}
 }

@@ -30,9 +30,19 @@ public class Git {
 	}
 	
 	public List<String> log(String file) {
-		return
+		return log(file, -1);
+	}
+	
+	public List<String> log(String file, int max) {
+		Command.Builder builder = 
 			new Command.Builder()
-				.args("git", "log", "--format=format:%H\t%at\t%cn\t%s")
+				.args("git", "log", "--format=format:%H\t%at\t%cn\t%s");
+		
+		if (max > 0) {
+			builder.args("-" + max);
+		}
+		
+		return builder
 				.args(file)
 				.execute(this.repositoryDir);
 	}

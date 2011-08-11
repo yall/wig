@@ -10,6 +10,7 @@ GET     /public/                                staticDir:public
 
 # Wiki home page
 GET     /									Wiki.index
+GET		/{<[^\.]*>path}/					Wiki.list
 GET		/{<[^\.]*>path}						Wiki.show
 POST	/{<[^\.]*>path}						Wiki.save
 GET		/{<[^\.]*>path}.edit				Wiki.edit
