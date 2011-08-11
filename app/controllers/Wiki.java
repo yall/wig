@@ -24,6 +24,9 @@ public class Wiki extends Controller {
 		// Retrieve sub entries if path is a category
 		List<Entry> entries = Storage.s().list(path);
 		
+		// Enable edition on current version
+		article.editable = true;
+		
 		render(article, entries, html);
 	}
 	
@@ -31,6 +34,10 @@ public class Wiki extends Controller {
 		Article article = Engine.retrieve(path, version);
 		article.version.version = version;
 		String html = Engine.html(article);
+		
+		// Disable edition on past version
+		article.editable = false;
+		
 		renderTemplate("Wiki/show.html", article, html);
 	}
 	

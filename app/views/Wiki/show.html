@@ -14,10 +14,14 @@
 </h2>
 
 #{if article.exists}
+	
 	<div class="wig-commands">
+		#{if article.editable}
 		[<a href="@{Wiki.edit(article.path.raw())}">edit</a>]
+		#{/if}
 		[<a href="@{Wiki.history(article.path.raw())}">history</a>]
 	</div>
+	
 	<div class="wig-content">
 		${html.raw()}
 	</div>
@@ -29,7 +33,7 @@
 	</p>
 #{/else}
 
-
+#{if entries != null}
 <h2 class="wig-title">
 	Category: ${article.path}
 	#{if !entries.empty}
@@ -47,4 +51,6 @@
 	#{/list}
 </ul>
 #{/if}
+#{/if}
+
 

@@ -20,7 +20,7 @@
 		<td>${version.date.since()}</td>
 		<td>${version.user}</td>
 		<td>${version.comment}</td>
-		<td><a href="@{Wiki.show(article.path)}.v${version.version}">[show]</a></td>
+		<td><a href="@{Wiki.version(article.path, version.version)}">[show]</a></td>
 	</tr>
 	#{/list}
 	

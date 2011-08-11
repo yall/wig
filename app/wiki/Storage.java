@@ -55,10 +55,10 @@ public abstract class Storage {
 			return fileFor(article.path);
 		}
 		protected File fileFor(String path) {
-			return new File(Wig.REPOSITORY_DIR, path + Wig.MARKUP_FILE_EXTENSION);
+			return new File(Wig.STORAGE_DIR, path + Wig.MARKUP_FILE_EXTENSION);
 		}
 		protected File dirFor(String path) {
-			return new File(Wig.REPOSITORY_DIR, path);
+			return new File(Wig.STORAGE_DIR, path);
 		}
 		
 		@Override
@@ -232,7 +232,7 @@ public abstract class Storage {
 				System.out.println(log);
 				String[] parts = log.split("\\t");
 				String hash = parts[0];
-				Date date = new Date(Long.valueOf(parts[1]).longValue());
+				Date date = new Date(Long.valueOf(parts[1]).longValue() * 1000);
 				String user = parts[2];
 				String comment = parts[3];
 				versions.add(new Version(hash, user, comment, date));

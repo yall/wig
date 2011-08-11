@@ -12,7 +12,7 @@ public class Git {
 	}
 	
 	public static Git repo() {
-		return new Git(Wig.REPOSITORY_DIR);
+		return new Git(Wig.STORAGE_DIR);
 	}
 	
 	public void add(String file) {

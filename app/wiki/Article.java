@@ -9,6 +9,7 @@ public class Article extends Entry {
 	public String content;
 	public boolean exists = false;
 	public Version version = new Version();
+	public boolean editable = false;
 	
 	public Article(String path) {
 		super(path);
