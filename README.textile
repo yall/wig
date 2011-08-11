@@ -1,5 +1,16 @@
 h1. Wig is a git-based wiki powered by Play!
 
+h2. Try it
+
+bc.. $ mkdir wig && cd wig
+$ git init storage
+$ git clone https://github.com/yall/wig.git app
+
+p. Then @wig.storage.dir@ in conf/application.conf to your new storage repository
+
+bc.. $ play run app
+
+
 h2. Purpose
 
 *  Play with "%{color:green}Play!%":http://www.playframework.org/
