@@ -1,26 +1,30 @@
 package controllers;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-
-import helpers.Wig;
 import play.mvc.Controller;
 import wiki.Article;
 import wiki.Engine;
+import wiki.Entry;
+import wiki.Storage;
 
 public class Wiki extends Controller {
 
 	public static void index() {
-		render();
+		List<Entry> entries = Storage.s().list("");
+		render(entries);
 	}
 	
 	public static void show(String path) {
+		// Retrieve article
 		Article article = Engine.retrieve(path);
 		String html = Engine.html(article);
-		render(article, html);
+		
+		// Retrieve sub entries if path is a category
+		List<Entry> entries = Storage.s().list(path);
+		
+		render(article, entries, html);
 	}
 	
 	public static void version(String path, String version) {

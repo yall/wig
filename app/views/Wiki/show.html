@@ -23,13 +23,28 @@
 	</div>
 #{/if}
 #{else}
-	<p>This article (<span class="wig-article-path">${article.path}</span>) does not exist.</p>
 	<p>
-		<a href="/${article.path.raw()}.edit">Create ${article.path}</a> or 
+		<a href="/${article.path.raw()}.edit">Create ${article.path} article</a> or 
 		<a href="@{Wiki.index}">search</a> anything else.
 	</p>
 #{/else}
 
-<div class="modification">
+
+<h2 class="wig-title">
+	Category: ${article.path}
+	#{if !entries.empty}
+	<span class="wig-message">entries</span>
+	#{/if}
+	#{else}
+	<span class="wig-message">no entry</span>
+	#{/else}
 	
-</div>
+</h2>
+#{if !entries.empty}
+<ul>
+	#{list items:entries, as:'entry'}
+	<li><a href="@{Wiki.show(entry.path)}">${entry.name}</a></li>
+	#{/list}
+</ul>
+#{/if}
+

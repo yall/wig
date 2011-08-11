@@ -10,3 +10,11 @@
 	<input type="text" id="path" name="path" />
 	<input type="submit" value="Search" />
 </form>
+
+
+<h2 class="wig-title">Index</h2>
+<ul>
+	#{list items:entries, as:'entry'}
+	<li><a href="@{Wiki.show(entry.path)}">${entry.name}</a></li>
+	#{/list}
+</ul>

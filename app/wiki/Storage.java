@@ -1,5 +1,6 @@
 package wiki;
 
+import helpers.Git;
 import helpers.Wig;
 
 import java.io.BufferedReader;
@@ -7,12 +8,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.lang.NotImplementedException;
 
 import wiki.Article.Version;
 
@@ -22,23 +26,39 @@ public abstract class Storage {
 		FS, GIT;
 	}
 	
-	public static Storage mode(Policy mode) {
-		return new FSStorage();
+	private Storage() {
+		
+	}
+	
+	private static final Storage INSTANCE;
+	static {
+		if ("FS".equals(Wig.STORAGE_POLICY)) {
+			INSTANCE = new FSStorage();
+		} else {
+			INSTANCE = new GitStorage();
+		}
+	}
+	
+	public static Storage s() {
+		return INSTANCE;
 	}
 	
 	public abstract Article retrieve(String path);
 	public abstract Article retrieve(String path, String version);
 	public abstract Article save(Article article);
 	public abstract List<Article.Version> history(Article article);
-
+	public abstract List<Entry> list(String path);
 	
 	static class FSStorage extends Storage {
 
-		private File fileFor(Article article) {
+		protected File fileFor(Article article) {
 			return fileFor(article.path);
 		}
-		private File fileFor(String path) {
+		protected File fileFor(String path) {
 			return new File(Wig.REPOSITORY_DIR, path + Wig.MARKUP_FILE_EXTENSION);
+		}
+		protected File dirFor(String path) {
+			return new File(Wig.REPOSITORY_DIR, path);
 		}
 		
 		@Override
@@ -81,9 +101,9 @@ public abstract class Storage {
 			
 			article.exists = file.exists();
 			
-			if (article.exists) {
+			if (article.exists && article.version == null) {
 				article.version = 
-					new Article.Version("current", "me", "last commit", new Date());
+					new Article.Version("current", "anonymous", "", new Date());
 			}
 			
 			return article;
@@ -115,9 +135,9 @@ public abstract class Storage {
 				}
 			}
 				
-			if (article.exists) {
+			if (article.exists && article.version == null) {
 				article.version = 
-					new Article.Version("current", "me", "last commit", new Date());
+					new Article.Version("current", "anonymous", "last commit", new Date());
 			}
 			
 			return article;
@@ -132,7 +152,8 @@ public abstract class Storage {
 		
 		@Override
 		public List<Version> history(Article article) {
-			List<Article.Version> versions =
+			throw new NotImplementedException();
+			/*List<Article.Version> versions =
 				new ArrayList<Article.Version>();
 			
 			versions.add(new Article.Version("001", "yall", "First edition", new Date("12/11/1983")));
@@ -146,8 +167,77 @@ public abstract class Storage {
 				}
 				
 			});
-			return versions;
+			return versions;*/
 		}
 		
+		
+		@Override
+		public List<Entry> list(String path) {
+			List<Entry> entries = new ArrayList<Entry>();
+			
+			File dir = dirFor(path);
+			if (dir.exists() && dir.isDirectory()) {
+				String[] entriesNames = dir.list(new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String name) {
+						return (!name.startsWith("."));
+					}
+				});
+				for (String entryName : entriesNames) {
+					File child = new File(dir, entryName);
+					if (child.isDirectory()) {
+						String categoryPath = 
+							new File(path, entryName)
+							.getPath();
+						entries.add(new Category(categoryPath));
+					} else {
+						String articlePath =
+							new File(
+								path,
+								entryName.substring(0, entryName.indexOf(Wig.MARKUP_FILE_EXTENSION)))
+							.getPath();
+						entries.add(retrieve(articlePath));
+					}
+				}
+			}
+			
+			return entries;
+		}
+		
+		
+	}
+
+	static class GitStorage extends FSStorage {
+		@Override
+		public Article save(Article article) {
+			article.version.date = new Date();
+			Article r = super.save(article);
+			Git.repo().username(article.version.user);
+			Git.repo().add(".");
+			Git.repo().commit(article.version.comment);		
+			return r;
+		}
+		
+		@Override
+		public List<Version> history(Article article) {
+			File file = fileFor(article);
+			List<String> logs =
+				Git.repo().log(file.getPath());
+			return toVersions(logs);
+		}
+		
+		private List<Version> toVersions(List<String> logs) {
+			List<Version> versions = new ArrayList<Article.Version>();
+			for (String log : logs) {
+				System.out.println(log);
+				String[] parts = log.split("\\t");
+				String hash = parts[0];
+				Date date = new Date(Long.valueOf(parts[1]).longValue());
+				String user = parts[2];
+				String comment = parts[3];
+				versions.add(new Version(hash, user, comment, date));
+			}
+			return versions;
+		}
 	}
 }

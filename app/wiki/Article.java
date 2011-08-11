@@ -4,24 +4,19 @@ import java.util.Date;
 
 import play.db.jpa.Model;
 
-public class Article {
+public class Article extends Entry {
 
-	public String path;
 	public String content;
 	public boolean exists = false;
-	public Version version;
+	public Version version = new Version();
 	
 	public Article(String path) {
-		this.path = path;
+		super(path);
 	}
 	
 	public Article(String path, String content) {
-		this.path = path;
+		super(path);
 		this.content = content;
-	}
-	
-	public static Article findByPath(String path) {
-		return new Article(path, "Lorem ipsum...");
 	}
 	
 	public static class Version {
@@ -29,6 +24,9 @@ public class Article {
 		public String user;
 		public String comment;
 		public Date date;
+		public Version() {
+			
+		}
 		public Version(String version, String user, String comment, Date date) {
 			this.version = version;
 			this.user = user;

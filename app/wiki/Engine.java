@@ -12,15 +12,15 @@ import wiki.Storage.Policy;
 public class Engine {
 	
 	public static Article retrieve(String path) {
-		return Storage.mode(Policy.FS).retrieve(path);
+		return Storage.s().retrieve(path);
 	}
 	
 	public static Article retrieve(String path, String version) {
-		return Storage.mode(Policy.FS).retrieve(path, version);
+		return Storage.s().retrieve(path, version);
 	}
 	
 	public static Article save(Article article) {
-		return Storage.mode(Policy.FS).save(article);
+		return Storage.s().save(article);
 	}
 	
 	public static String html(Article article) {
@@ -42,7 +42,7 @@ public class Engine {
 	 * Empty list if article does not exist yet
 	 */
 	public static List<Article.Version> history(Article article) {
-		return Storage.mode(Policy.FS).history(article);
+		return Storage.s().history(article);
 	}
 	
 }
